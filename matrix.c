@@ -21,7 +21,7 @@ void print_matrix(struct matrix *m) {
       printf("\n");
     }
   } else {
-    printf("Invalid matrix\n");
+    printf("Error: Uninitialized matrix\n");
   }
 }
 
@@ -32,9 +32,8 @@ Returns:
 turns m in to an identity matrix
 */
 void ident(struct matrix *m) {
-  int r, c;
-
   if (m->rows == m->cols) { // square matrix
+    int r, c;
     
     for (r=0; r < m->rows; r++) {
       for (c=0; c < m->cols; c++) {
@@ -59,6 +58,32 @@ Returns:
 a*b -> b
 */
 void matrix_mult(struct matrix *a, struct matrix *b) {
+  if (a->lastcol && b->lastcol) {
+    if (a->cols == b->rows) {
+      struct matrix * new;
+      int i, j, k;
+      int to_add;
+
+      new = new_matrix(a->rows, b->cols);
+
+      for (i = 0; i < a->rows; i++) {
+	for (j = 0; j < b->cols; j++) {
+	  too_add = 0;
+	  for (k = 0; k < a->cols; k++) {
+	    too_add += a->m[i][k] * b->m[k][j];
+	  }
+	  new->m[i][j] = to_add;
+	}
+      }
+      new->lastcol = b->cols - 1;
+      free_matrix(b);
+      b = new;
+    } else {
+      printf("Error: These matrices are incompatible for multiplication.\n");
+    }
+  } else {
+    printf("Error: One or more of these matrices is uninitialized.\n");
+  }
 }
 
 

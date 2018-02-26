@@ -14,6 +14,8 @@ int main() {
   struct matrix *edges;
 
   edges = new_matrix(4, 4);
+
+  printf("Test ident and print_matrix:\n");
   ident(edges);
   print_matrix(edges);
 
