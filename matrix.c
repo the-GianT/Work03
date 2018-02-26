@@ -12,6 +12,17 @@ Returns:
 print the matrix
 */
 void print_matrix(struct matrix *m) {
+  if (m->lastcol) {
+    int r, c;
+
+    for (r=0; r < m->rows; r++) {
+      for (c=0; c < m->cols; c++)
+	printf("%lf ", m->m[r][c]);
+      printf("\n");
+    }
+  } else {
+    printf("Invalid matrix\n");
+  }
 }
 
 /*-------------- void ident() --------------
@@ -21,6 +32,22 @@ Returns:
 turns m in to an identity matrix
 */
 void ident(struct matrix *m) {
+  int r, c;
+
+  if (m->rows == m->cols) { // square matrix
+    
+    for (r=0; r < m->rows; r++) {
+      for (c=0; c < m->cols; c++) {
+	if (r == c) // ones on the diagonal
+	  m->m[r][c] = 1;
+	else // zeros elsewhere
+	  m->m[r][c] = 0;
+      }
+    }
+    m->lastcol = m->cols - 1;
+  } else {
+    printf("Error: not a square matrix\n");
+  }
 }
 
 
