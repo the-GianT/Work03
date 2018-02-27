@@ -68,9 +68,9 @@ void matrix_mult(struct matrix *a, struct matrix *b) {
 
       for (i = 0; i < a->rows; i++) {
 	for (j = 0; j < b->cols; j++) {
-	  too_add = 0;
+	  to_add = 0;
 	  for (k = 0; k < a->cols; k++) {
-	    too_add += a->m[i][k] * b->m[k][j];
+	    to_add += a->m[i][k] * b->m[k][j];
 	  }
 	  new->m[i][j] = to_add;
 	}
