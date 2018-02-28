@@ -21,7 +21,7 @@ void print_matrix(struct matrix *m) {
       printf("\n");
     }
   } else {
-    printf("Error: Matrix needs at least two columns.\n");
+    printf("Error: cannot print empty matrix\n");
   }
 }
 
@@ -60,12 +60,10 @@ a*b -> b
 void matrix_mult(struct matrix *a, struct matrix *b) {
   if (a->lastcol > -1 && b->lastcol > -1) {
     if (a->lastcol + 1 == b->rows) {
-      // struct matrix * new;
-      double **tmp;
+      double **tmp; // to store resulting matrix
       int i, j, k;
-      int to_add;
+      int to_add; // number to be added to the next space in the resulting matrix
 
-      // new = new_matrix(a->rows, b->cols);
       tmp = (double **)malloc(a->rows * sizeof(double *));
       for (i=0;i<a->rows;i++) {
 	tmp[i]=(double *)malloc(b->cols * sizeof(double));
@@ -80,13 +78,11 @@ void matrix_mult(struct matrix *a, struct matrix *b) {
 	  tmp[i][j] = to_add;
 	}
       }
-      // new->lastcol = b->cols - 1;
-      // free_matrix(b);
+      
       for (i=0;i<b->rows;i++) {
 	free(b->m[i]);
       }
       free(b->m);
-      // b = new;
       b->m = tmp;
     } else {
       printf("Error: These matrices are incompatible for multiplication.\n");
@@ -125,6 +121,12 @@ struct matrix *new_matrix(int rows, int cols) {
   m->m=tmp;
   m->rows = rows;
   m->cols = cols;
+
+  /*
+    I changed this from 0 to -1 so that when add_point increments it, it will be
+    the index of the last column in the matrix rather than the number of real
+    columns:
+  */
   m->lastcol = -1;
 
   return m;
