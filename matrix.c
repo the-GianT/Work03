@@ -12,16 +12,16 @@ Returns:
 print the matrix
 */
 void print_matrix(struct matrix *m) {
-  if (m->lastcol) {
+  if (m->lastcol > -1) {
     int r, c;
 
     for (r=0; r < m->rows; r++) {
-      for (c=0; c < m->cols; c++)
+      for (c=0; c < m->lastcol + 1; c++)
 	printf("%lf ", m->m[r][c]);
       printf("\n");
     }
   } else {
-    printf("Error: Uninitialized matrix\n");
+    printf("Error: Matrix needs at least two columns.\n");
   }
 }
 
@@ -58,8 +58,8 @@ Returns:
 a*b -> b
 */
 void matrix_mult(struct matrix *a, struct matrix *b) {
-  if (a->lastcol && b->lastcol) {
-    if (a->cols == b->rows) {
+  if (a->lastcol > -1 && b->lastcol > -1) {
+    if (a->lastcol + 1 == b->rows) {
       // struct matrix * new;
       double **tmp;
       int i, j, k;
@@ -72,9 +72,9 @@ void matrix_mult(struct matrix *a, struct matrix *b) {
       }
 
       for (i = 0; i < a->rows; i++) {
-	for (j = 0; j < b->cols; j++) {
+	for (j = 0; j < b->lastcol + 1; j++) {
 	  to_add = 0;
-	  for (k = 0; k < a->cols; k++) {
+	  for (k = 0; k < b->rows; k++) {
 	    to_add += a->m[i][k] * b->m[k][j];
 	  }
 	  tmp[i][j] = to_add;
@@ -92,7 +92,7 @@ void matrix_mult(struct matrix *a, struct matrix *b) {
       printf("Error: These matrices are incompatible for multiplication.\n");
     }
   } else {
-    printf("Error: One or more of these matrices is uninitialized.\n");
+    printf("Error: One or more of these matrices is empty.\n");
   }
 }
 
@@ -125,7 +125,7 @@ struct matrix *new_matrix(int rows, int cols) {
   m->m=tmp;
   m->rows = rows;
   m->cols = cols;
-  m->lastcol = 0;
+  m->lastcol = -1;
 
   return m;
 }
