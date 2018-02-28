@@ -1,5 +1,5 @@
 OBJECTS= main.o draw.o display.o matrix.o
-CFLAGS= -Wall
+CFLAGS= -Wall -g
 LDFLAGS= -lm
 CC= gcc
 
@@ -7,7 +7,7 @@ main: $(OBJECTS)
 	$(CC) -o main $(OBJECTS) $(LDFLAGS)
 
 main.o: main.c display.h draw.h ml6.h matrix.h
-	$(CC) -c main.c
+	$(CC) -g -c main.c
 
 draw.o: draw.c draw.h display.h ml6.h matrix.h
 	$(CC) $(CFLAGS) -c draw.c
@@ -22,3 +22,7 @@ run: main
 	./main
 clean:
 	rm *.o *~
+
+
+debug: main
+	valgrind --leak-check=yes --track-origins=yes ./main

@@ -60,11 +60,16 @@ a*b -> b
 void matrix_mult(struct matrix *a, struct matrix *b) {
   if (a->lastcol && b->lastcol) {
     if (a->cols == b->rows) {
-      struct matrix * new;
+      // struct matrix * new;
+      double **tmp;
       int i, j, k;
       int to_add;
 
-      new = new_matrix(a->rows, b->cols);
+      // new = new_matrix(a->rows, b->cols);
+      tmp = (double **)malloc(a->rows * sizeof(double *));
+      for (i=0;i<a->rows;i++) {
+	tmp[i]=(double *)malloc(b->cols * sizeof(double));
+      }
 
       for (i = 0; i < a->rows; i++) {
 	for (j = 0; j < b->cols; j++) {
@@ -72,12 +77,17 @@ void matrix_mult(struct matrix *a, struct matrix *b) {
 	  for (k = 0; k < a->cols; k++) {
 	    to_add += a->m[i][k] * b->m[k][j];
 	  }
-	  new->m[i][j] = to_add;
+	  tmp[i][j] = to_add;
 	}
       }
-      new->lastcol = b->cols - 1;
-      free_matrix(b);
-      b = new;
+      // new->lastcol = b->cols - 1;
+      // free_matrix(b);
+      for (i=0;i<b->rows;i++) {
+	free(b->m[i]);
+      }
+      free(b->m);
+      // b = new;
+      b->m = tmp;
     } else {
       printf("Error: These matrices are incompatible for multiplication.\n");
     }
