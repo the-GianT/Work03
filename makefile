@@ -7,6 +7,9 @@ D-OBJECTS= debug-main.o debug-draw.o debug-display.o debug-matrix.o
 D-CFLAGS= -Wall -g
 
 
+run: main
+	./main
+
 main: $(OBJECTS)
 	$(CC) -o main $(OBJECTS) $(LDFLAGS)
 
@@ -22,8 +25,6 @@ display.o: display.c display.h ml6.h matrix.h
 matrix.o: matrix.c matrix.h
 	$(CC) $(CFLAGS) -c matrix.c
 
-run: main
-	./main
 clean:
 	rm *.o *~
 
